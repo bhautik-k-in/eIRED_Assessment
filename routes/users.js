@@ -11,6 +11,5 @@ const USER_CONTROLLER = require('../controllers/users');
 router.post('/register', validate(register, { context: true }), USER_CONTROLLER.register);
 router.post('/verify', validate(verify, { context: true }), USER_CONTROLLER.verify);
 router.post('/login',  validate(login, { context: true }), USER_CONTROLLER.login);
-router.post('/logout', isAuth(), USER_CONTROLLER.logout);
 
 module.exports = router;

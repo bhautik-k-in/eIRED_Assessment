@@ -1,15 +1,14 @@
 const APIError = require('../utils/APIError');
 const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
-const redis = require('redis');
+const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const { getJwt } = require('../helpers/jwt');
 
 const { jwtKeys } = require('../config/index');
 const { generateRandomNumber } = require('../utils/generateRandomNumber');
 const { sendEmail } = require('../services/sendEmail');
 const { excludeFields } = require('../helpers/excludeFields');
 const { USERS } = require('../config/dbConnection');
+const { removeFields } = require('../helpers/removeFields');
 
 
 /**
@@ -28,7 +27,7 @@ exports.register = async (req, res, next) => {
         if (isExist) throw new APIError({ status: 401, message: "Looks like this email already exists." });
 
         const newUser = (await USERS.create({ name, email, password })).toObject();
-        return res.sendJson(201, "User Registered Successfully", newUser);
+        return res.sendJson(201, "User Registered Successfully", removeFields(newUser));
     } catch (error) {
         next(error);
     }
@@ -56,8 +55,7 @@ exports.verify = async (req, res, next) => {
         if (+otp !== +isUserExist.OTP) throw new APIError({ status: 401, message: 'Invalid OTP' });
 
         await isUserExist.updateOne({ isVerified: true });
-        const jwtr = await getJwt();
-        const token = jwtr.sign(isUserExist.toObject(), jwtKeys.secretKey, { expiresIn: '1d' });
+        const token = jwt.sign(isUserExist.toObject(), jwtKeys.secretKey, { expiresIn: '1d' });
 
         return res.sendJson(200, "Verification is successful", { token: token });
     } catch (error) {
@@ -95,24 +93,6 @@ exports.login = async (req, res, next) => {
 
         if (emailSentResult) return res.sendJson(200, `Verification mail is sent successfully on ${email}. Please check your inbox`);
         else throw new APIError({ status: 401, message: "Invalid email address or email does not exist on an internet" });
-    } catch (error) {
-        next(error);
-    }
-}
-
-/**
- * @description Redis jwt destroy
- * @author Bhautik Kevadiya
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @returns Return the logged out message
- */
-exports.logout = async (req, res, next) => {
-    try {
-        const token = req.headers['authorization'];
-        await jwtr.destroy(token);
-        return res.sendJson(200, "Logged out");
     } catch (error) {
         next(error);
     }

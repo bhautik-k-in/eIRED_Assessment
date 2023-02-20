@@ -61,7 +61,7 @@ exports.createTask = async (req, res, next) => {
         let newTask = await (await TASKS.create(taskPayload)).populate("user", "name");
         newTask = newTask.toObject();
 
-        return res.sendJson(200, `${task} is created`, removeFields(newTask));
+        return res.sendJson(201, `${task} is created`, removeFields(newTask));
     } catch (error) {
         next(error);
     }

@@ -11,7 +11,7 @@
 exports.sendJson = function sendJson (status = 200, message = null, response = null, page = null, total = null) {
     let res = {
         status        : status,
-        statusState   : status === 200 ? 'success' : 'error',
+        statusState   : [200,201].includes(status) ? 'success' : 'error',
         message       : message,
         data          : response instanceof Array ? response : response instanceof Object ? response : [],
         page          : page,
