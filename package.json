@@ -1,0 +1,32 @@
+{
+  "name": "eired_assessment",
+  "version": "1.0.0",
+  "description": "Basic API operations",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "author": "Bhautik Kevadiya",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validation": "^4.1.0",
+    "joi": "^17.7.1",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-redis": "^7.0.3",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
+    "mongoose": "^6.9.2",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "path": "^0.12.7",
+    "redis": "^4.6.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
